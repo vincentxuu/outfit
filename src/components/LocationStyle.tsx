@@ -45,6 +45,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [images, setImages] = useState<ImageData[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [item, setItem] = useState<string>("Popularity")
 
 
 
@@ -62,16 +63,18 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
       }
       return prevColors; // 默認情況返回原狀態
     });
+    setItem("All Item");
   };
   const handleGenderChange = (gender: string) => {
     console.log("handleGenderChange", gender);
     setSelectedGender(gender);
+    setItem("All Item");
   };
 
   useEffect(() => {
     const fetchImages = async () => {
       const colorParams = selectedColor.join(',');
-      const genderParam = selectedGender ? `&gender=${selectedGender}` : '';
+      const genderParam =(selectedGender?.includes("M") || selectedGender?.includes("W")) ? `&gender=${selectedGender}` : '';
       console.log("colorParams", colorParams);
       console.log("genderParam", genderParam);
 
@@ -145,7 +148,6 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
               </ToggleGroup>
             </div>
           </div>
-
         </div>
         <div className="flex flex-row items-end justify-start gap-[9px] max-w-full text-black mq675:flex-wrap">
           <div className="relative leading-[150%] font-medium inline-block min-w-[125px] mq450:text-base mq450:leading-[24px]">
@@ -157,8 +159,6 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
             onValueChange={(value) => handleColorChange(value)}
           >
             {colors.map((color, index) => {
-              // console.lo
-              console.log({status: selectedColor.includes(color.name) , bg: color.bgColor , dimm: color.dimmedColor})
               return(
               <div key={index} className="flex flex-col items-start justify-end pt-0 pb-0.5 pr-[11px] pl-0">
                 <ToggleGroupItem
@@ -175,7 +175,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
           <div className="self-stretch flex flex-col items-start justify-start gap-[23px] max-w-full text-5xl font-arimo-hebrew-subset-italic">
             <div className="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap">
               <i className="relative leading-[150%] [text-shadow:0px_4px_4px_rgba(0,_0,_0,_0.25)] mq450:text-lgi mq450:leading-[29px]">
-                Popularity ({images.length > 0 ? images[0].dataNumber : ''})
+                {item} ({images.length > 0 ? images[0].dataNumber : ''})
               </i>
               <div className="relative leading-[150%] font-medium inline-block min-w-[14px] mq450:text-base mq450:leading-[24px]">
                 <Pagination>
