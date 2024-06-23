@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import img from "../assets/beams.png";
 
 export type NavigationFooterType = {
   className?: string;
@@ -8,7 +7,6 @@ export type NavigationFooterType = {
 const NavigationFooter: FunctionComponent<NavigationFooterType> = ({
   className = "",
 }) => {
-  console.log("IMG",img);
   return (
     <footer
       className={`self-stretch shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)] bg-white overflow-hidden flex flex-col items-start justify-start pt-px pb-[71px] pr-[79px] pl-20 box-border gap-[46px] max-w-full text-left text-xl text-black font-arimo-hebrew-subset-italic mq825:gap-[23px] mq825:pl-10 mq825:pr-[39px] mq825:box-border ${className}`}
@@ -37,7 +35,7 @@ const NavigationFooter: FunctionComponent<NavigationFooterType> = ({
                 className="h-[103px] w-[143px] relative object-cover z-[1]"
                 loading="lazy"
                 alt=""
-                src="src/assets/beams.png"
+                src="/beams.png"
               />
             </div>
           </div>
