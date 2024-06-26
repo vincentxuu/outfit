@@ -51,7 +51,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
     '波西米雅': ['red', 'blue', 'beige', 'brown', 'green']
   };
 
-  const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
+  const [_selectedStyles, setSelectedStyles] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string[]>([]);
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [newColors, setNewColors] = useState<string[]>([]);
