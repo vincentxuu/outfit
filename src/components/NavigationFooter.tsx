@@ -22,7 +22,7 @@ const NavigationFooter: FunctionComponent<NavigationFooterType> = ({
             ccClub project
           </i>
           <i className="relative leading-[150%] text-darkgray mq450:text-base mq450:leading-[24px]">
-            Tim、Vincent、Jennie、Ellie
+            Tim、Jennie、Ellie
           </i>
         </div>
         <div className="w-[200px] flex flex-col items-start justify-start pt-3 px-0 pb-0 box-border">

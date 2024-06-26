@@ -29,25 +29,45 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
 }) => {
 
   const colors = [
-    { name: 'beige', bgColor: 'data-[state=on]:bg-khaki', dimmedColor: 'bg-khaki/50' },
-    { name: 'green', bgColor: 'data-[state=on]:bg-forestgreen', dimmedColor: 'bg-forestgreen/50' },
-    { name: 'orange', bgColor: 'data-[state=on]:bg-orange', dimmedColor: 'bg-orange/50' },
-    { name: 'gray', bgColor: 'data-[state=on]:bg-gray-100', dimmedColor: 'bg-gray-100/50' },
-    { name: 'blue', bgColor: 'data-[state=on]:bg-darkslateblue', dimmedColor: 'bg-darkslateblue/50' },
-    { name: 'pink', bgColor: 'data-[state=on]:bg-deeppink', dimmedColor: 'bg-deeppink/50' },
-    { name: 'red', bgColor: 'data-[state=on]:bg-crimson', dimmedColor: 'bg-crimson/50' },
-    { name: 'brown', bgColor: 'data-[state=on]:bg-saddlebrown', dimmedColor: 'bg-saddlebrown/50' },
-    { name: 'black', bgColor: 'data-[state=on]:bg-black', dimmedColor: 'bg-black/50' },
-    { name: 'white', bgColor: 'data-[state=on]:bg-white', dimmedColor: 'bg-white/50', extraClass: 'box-border border-[0px] border-solid border-black' }
+    { name: 'black', bgColor: 'data-[state=on]:bg-black', dimmedColor: 'bg-black/70' },
+    { name: 'white', bgColor: 'data-[state=on]:bg-white', dimmedColor: 'bg-white/70', extraClass: 'box-border border-[1px] border-solid border-gray' },
+    { name: 'gray', bgColor: 'data-[state=on]:bg-gray-100', dimmedColor: 'bg-gray-100/70' },
+    { name: 'silver', bgColor: 'data-[state=on]:bg-silver', dimmedColor: 'bg-silver/70' },
+    { name: 'blue', bgColor: 'data-[state=on]:bg-darkslateblue', dimmedColor: 'bg-darkslateblue/70' },
+    { name: 'red', bgColor: 'data-[state=on]:bg-crimson', dimmedColor: 'bg-crimson/70' },
+    { name: 'brown', bgColor: 'data-[state=on]:bg-saddlebrown', dimmedColor: 'bg-saddlebrown/70' },
+    { name: 'beige', bgColor: 'data-[state=on]:bg-khaki', dimmedColor: 'bg-khaki/70' },
+    { name: 'green', bgColor: 'data-[state=on]:bg-forestgreen', dimmedColor: 'bg-forestgreen/70' },
+    { name: 'orange', bgColor: 'data-[state=on]:bg-orange', dimmedColor: 'bg-orange/70' }
   ];
 
+  const stylesColorsMap: { [key: string]: string[] } = {
+    '簡約': ['black', 'white', 'gray', 'silver', 'blue'],
+    '工業': ['gray', 'black', 'silver', 'red', 'brown', 'beige', 'green'],
+    '復古': ['brown', 'beige', 'green', 'white'],
+    '庭園': ['green', 'beige', 'brown', 'white'],
+    '南洋': ['orange', 'green', 'beige', 'brown', 'white'],
+    '地中海': ['blue', 'white', 'green', 'beige', 'brown'],
+    '波西米雅': ['red', 'blue', 'beige', 'brown', 'green']
+  };
+
+  const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string[]>([]);
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
+  const [newColors, setNewColors] = useState<string[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
   const [page, setPage] = useState<number>(1);
   const [item, setItem] = useState<string>("Popularity")
 
 
+  const handleStyleChange = (styles: string[]) => {
+    setSelectedStyles(styles);
+    const calculatedColors = styles.flatMap(style => stylesColorsMap[style] || []);
+    console.log("handleStyleChange", calculatedColors);
+    setNewColors(Array.from(new Set(calculatedColors)));
+  };
+  const filteredColors = newColors.length > 0 ? colors.filter(color => newColors.includes(color.name)) : colors;
+  console.log("filteredColors", filteredColors);
 
   const handleColorChange = (color: string | string[]) => {
     setSelectedColor(prevColors => {
@@ -74,7 +94,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
   useEffect(() => {
     const fetchImages = async () => {
       const colorParams = selectedColor.join(',');
-      const genderParam =(selectedGender?.includes("M") || selectedGender?.includes("W")) ? `&gender=${selectedGender}` : '';
+      const genderParam = (selectedGender?.includes("M") || selectedGender?.includes("W")) ? `&gender=${selectedGender}` : '';
       console.log("colorParams", colorParams);
       console.log("genderParam", genderParam);
 
@@ -111,14 +131,17 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
               <div className="relative leading-[150%] font-medium text-black whitespace-nowrap mq450:text-base mq450:leading-[24px]">
                 ① 選擇地點的風格｜
               </div>
-              <ToggleGroup type="multiple" className="flex flex-row items-start justify-start gap-[9px]">
+              <ToggleGroup
+                type="multiple"
+                className="flex flex-row items-start justify-start gap-[9px]"
+                onValueChange={(value) => handleStyleChange(value)}
+              >
                 {['簡約', '工業', '復古', '庭園', '南洋', '地中海', '波西米雅'].map((style, index) => (
                   <ToggleGroupItem
                     key={index}
                     value={style}
                     aria-label={style}
                     className="flex items-center justify-center px-2 py-1 min-w-[40px] text-gray mq450:text-base mq450:leading-[24px]"
-                    style={{ background: 'none', border: 'none' }}
                   >
                     {style}
                   </ToggleGroupItem>
@@ -140,7 +163,6 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
                     value={gender}
                     aria-label={gender}
                     className="text-gray text-center cursor-pointer mq450:text-base mq450:leading-[24px]"
-                    style={{ background: 'none', border: 'none' }}
                   >
                     {gender === 'M' ? '男性' : gender === 'W' ? '女性' : '不限性別'}
                   </ToggleGroupItem>
@@ -158,15 +180,16 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
             className="flex flex-row items-center justify-start gap-[20px]"
             onValueChange={(value) => handleColorChange(value)}
           >
-            {colors.map((color, index) => {
-              return(
-              <div key={index} className="flex flex-col items-start justify-end pt-0 pb-0.5 pr-[11px] pl-0">
-                <ToggleGroupItem
-                  className={`w-[25px] h-[25px] rounded-[50%] ${selectedColor.includes(color.name) ? color.bgColor : color.dimmedColor} ${color.extraClass || ''}`}
+            {filteredColors.map((color, index) => {
+              return (
+                <div key={index} className="flex flex-col items-start justify-end pt-0 pb-0.5 pr-[11px] pl-0">
+                  <ToggleGroupItem
+                    className = {` w-[25px] h-[25px] rounded-[50%] ${selectedColor.includes(color.name) ? color.bgColor : color.dimmedColor} ${color.extraClass || ''}`}
                   value={color.name}
-                />
-              </div>
-            )})}
+                  />
+                </div>
+              )
+            })}
           </ToggleGroup>
         </div>
       </div>

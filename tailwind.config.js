@@ -32,22 +32,19 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       colors: {
-        white: "#fff",
         black: "#000",
-        darkgray: "#9f9f9f",
-        gainsboro: "#e6e6e6",
+        white: "#fff",
         gray: {
-          "100": "#8a8a8a",
-          "200": "rgba(0, 0, 0, 0.3)",
+          100: "#8a8a8a",
+          50: "#8a8a8a80"
         },
-        saddlebrown: "#6f442a",
-        crimson: "#d91b20",
-        coral: "#e56946",
-        deeppink: "#db0f74",
+        silver: "#c0c0c0",
         darkslateblue: "#2f58ab",
-        orange: "#e7911f",
-        forestgreen: "#0c8e3c",
+        crimson: "#d91b20",
+        saddlebrown: "#6f442a",
         khaki: "#e0cb6f",
+        forestgreen: "#0c8e3c",
+        orange: "#e7911f"
       },
       spacing: {
         "spacing-m": "48px",
