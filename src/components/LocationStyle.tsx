@@ -29,16 +29,16 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
 }) => {
 
   const colors = [
-    { name: 'black', bgColor: 'data-[state=on]:bg-black', dimmedColor: 'bg-black/70' },
-    { name: 'white', bgColor: 'data-[state=on]:bg-white', dimmedColor: 'bg-white/70', extraClass: 'box-border border-[1px] border-solid border-gray' },
-    { name: 'gray', bgColor: 'data-[state=on]:bg-gray-100', dimmedColor: 'bg-gray-100/70' },
-    { name: 'silver', bgColor: 'data-[state=on]:bg-silver', dimmedColor: 'bg-silver/70' },
-    { name: 'blue', bgColor: 'data-[state=on]:bg-darkslateblue', dimmedColor: 'bg-darkslateblue/70' },
-    { name: 'red', bgColor: 'data-[state=on]:bg-crimson', dimmedColor: 'bg-crimson/70' },
-    { name: 'brown', bgColor: 'data-[state=on]:bg-saddlebrown', dimmedColor: 'bg-saddlebrown/70' },
-    { name: 'beige', bgColor: 'data-[state=on]:bg-khaki', dimmedColor: 'bg-khaki/70' },
-    { name: 'green', bgColor: 'data-[state=on]:bg-forestgreen', dimmedColor: 'bg-forestgreen/70' },
-    { name: 'orange', bgColor: 'data-[state=on]:bg-orange', dimmedColor: 'bg-orange/70' }
+    { name: 'black', bgColor: 'data-[state=on]:bg-black', dimmedColor: 'data-[state=off]:bg-black/70' },
+    { name: 'white', bgColor: 'data-[state=on]:bg-white', dimmedColor: 'data-[state=off]:bg-white/70', extraClass: 'box-border border-[1px] border-solid border-gray' },
+    { name: 'gray', bgColor: 'data-[state=on]:bg-gray-100', dimmedColor: 'data-[state=off]:bg-gray-100/70' },
+    { name: 'silver', bgColor: 'data-[state=on]:bg-silver', dimmedColor: 'data-[state=off]:bg-silver/70' },
+    { name: 'blue', bgColor: 'data-[state=on]:bg-darkslateblue', dimmedColor: 'data-[state=off]:bg-darkslateblue/70' },
+    { name: 'red', bgColor: 'data-[state=on]:bg-crimson', dimmedColor: 'data-[state=off]:bg-crimson/70' },
+    { name: 'brown', bgColor: 'data-[state=on]:bg-saddlebrown', dimmedColor: 'data-[state=off]:bg-saddlebrown/70' },
+    { name: 'beige', bgColor: 'data-[state=on]:bg-khaki', dimmedColor: 'data-[state=off]:bg-khaki/70' },
+    { name: 'green', bgColor: 'data-[state=on]:bg-forestgreen', dimmedColor: 'data-[state=off]:bg-forestgreen/70' },
+    { name: 'orange', bgColor: 'data-[state=on]:bg-orange', dimmedColor: 'data-[state=off]:bg-orange/70' }
   ];
 
   const stylesColorsMap: { [key: string]: string[] } = {
@@ -51,7 +51,6 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
     '波西米雅': ['red', 'blue', 'beige', 'brown', 'green']
   };
 
-  const [_selectedStyles, setSelectedStyles] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string[]>([]);
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [newColors, setNewColors] = useState<string[]>([]);
@@ -61,9 +60,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
 
 
   const handleStyleChange = (styles: string[]) => {
-    setSelectedStyles(styles);
     const calculatedColors = styles.flatMap(style => stylesColorsMap[style] || []);
-    console.log("handleStyleChange", calculatedColors);
     setNewColors(Array.from(new Set(calculatedColors)));
   };
   const filteredColors = newColors.length > 0 ? colors.filter(color => newColors.includes(color.name)) : colors;
@@ -72,21 +69,15 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
   const handleColorChange = (color: string | string[]) => {
     setSelectedColor(prevColors => {
       if (typeof color === 'string') {
-        // 如果 color 是字符串，處理單個顏色的切換
-        return prevColors.includes(color)
-          ? prevColors.filter(c => c !== color)
-          : [...prevColors, color];
+        return [color];
       } else if (Array.isArray(color)) {
-        // 如果 color 是字符串陣列，一次性添加所有顏色
-        const uniqueColors = color.filter(c => !prevColors.includes(c)); // 過濾掉已經存在的顏色
-        return [...prevColors, ...uniqueColors];
+        return [...color];
       }
-      return prevColors; // 默認情況返回原狀態
+      return prevColors;
     });
     setItem("All Item");
   };
   const handleGenderChange = (gender: string) => {
-    console.log("handleGenderChange", gender);
     setSelectedGender(gender);
     setItem("All Item");
   };
@@ -96,7 +87,6 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
       const colorParams = selectedColor.join(',');
       const genderParam = (selectedGender?.includes("M") || selectedGender?.includes("W")) ? `&gender=${selectedGender}` : '';
       console.log("colorParams", colorParams);
-      console.log("genderParam", genderParam);
 
       try {
         const response = await axios.get<{
