@@ -118,8 +118,8 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
         <div className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[20px] max-w-full">
           <div className="flex-1 flex flex-col items-start justify-start gap-[30px] min-w-[269px] max-w-full">
             <div className="self-stretch flex flex-row items-start justify-start gap-[9px] mq450:flex-wrap">
-              <div className="relative leading-[150%] font-medium text-black whitespace-nowrap mq450:text-base mq450:leading-[24px]">
-                ① 選擇地點的風格｜
+              <div className="relative leading-[150%] font-medium text-black whitespace-nowrap mt-1.5 mq450:text-base mq450:leading-[24px]">
+                ｜選擇地點的風格｜
               </div>
               <ToggleGroup
                 type="multiple"
@@ -131,7 +131,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
                     key={index}
                     value={style}
                     aria-label={style}
-                    className="flex items-center justify-center px-2 py-1 min-w-[40px] text-gray mq450:text-base mq450:leading-[24px]"
+                    className="flex items-center justify-center px-2 py-1 min-w-[40px] text-gray mq450:text-base mq450:leading-[24px] whitespace-nowrap overflow-hidden text-ellipsis"
                   >
                     {style}
                   </ToggleGroupItem>
@@ -140,7 +140,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
             </div>
             <div className="flex flex-row items-start justify-start gap-[9px] max-w-full mq450:flex-wrap">
               <div className="flex items-center leading-[150%] mt-1.5 font-medium text-black min-w-[125px] mq450:text-base mq450:leading-[24px]">
-                <span>② 選擇性別｜</span>
+                <span>｜選擇性別｜</span>
               </div>
               <ToggleGroup
                 type="single"
@@ -163,7 +163,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
         </div>
         <div className="flex flex-row items-end justify-start gap-[9px] max-w-full text-black mq675:flex-wrap">
           <div className="relative leading-[150%] font-medium inline-block min-w-[125px] mq450:text-base mq450:leading-[24px]">
-            ③ 選擇顏色｜
+            ｜選擇顏色｜
           </div>
           <ToggleGroup
             type="multiple"
