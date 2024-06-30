@@ -56,6 +56,7 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
   const [newColors, setNewColors] = useState<string[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const [item, setItem] = useState<string>("Popularity")
 
 
@@ -103,6 +104,10 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
         }));
 
         setImages(formattedData);
+
+        const totalItems = parseInt(data.all_items, 10); // 假設 all_items 是字串，需要轉換為數字
+        const totalPages = Math.ceil(totalItems / 12); // 每頁顯示12項
+        setTotalPages(totalPages);
       } catch (error) {
         console.error('Error fetching images:', error);
       }
@@ -110,6 +115,18 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
 
     fetchImages();
   }, [selectedColor, selectedGender, page]);
+
+  const getDisplayedPages = () => {
+    const startPage = page;
+    const endPage = Math.min(totalPages, page + 4);
+    const pages = [];
+  
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+  
   return (
     <section
       className={`w-[1090px] flex flex-col items-start justify-start gap-[49px] max-w-full text-left text-xl text-darkgray font-noto-sans-cjk-tc mq675:gap-[24px] ${className}`}
@@ -193,26 +210,26 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
               <div className="relative leading-[150%] font-medium inline-block min-w-[14px] mq450:text-base mq450:leading-[24px]">
                 <Pagination>
                   <PaginationContent>
-                    <PaginationItem>
+                  <PaginationItem>
                       <PaginationPrevious onClick={() => setPage(prevPage => Math.max(prevPage - 1, 1))} />
                     </PaginationItem>
-                    {[...Array(5)].map((_, index) => (
+                    {getDisplayedPages().map((pageNum) => (
                       <PaginationItem
-                        key={index}
+                        key={pageNum}
                         style={{ background: 'none', border: 'none' }}
                       >
                         <PaginationLink
                           href="#"
-                          onClick={() => setPage(index + 1)}
-                          isActive={index + 1 === page}
+                          onClick={() => setPage(pageNum)}
+                          isActive={pageNum === page}
                           style={{ background: 'none', border: 'none' }}
                         >
-                          {index + 1}
+                          {pageNum}
                         </PaginationLink>
                       </PaginationItem>
                     ))}
                     <PaginationItem>
-                      <PaginationNext onClick={() => setPage(prevPage => prevPage + 1)} />
+                      <PaginationNext onClick={() => setPage(prevPage => Math.min(prevPage + 1, totalPages))} />
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>
@@ -230,23 +247,23 @@ const LocationStyle: FunctionComponent<LocationStyleType> = ({
                     <PaginationItem>
                       <PaginationPrevious onClick={() => setPage(prevPage => Math.max(prevPage - 1, 1))} />
                     </PaginationItem>
-                    {[...Array(5)].map((_, index) => (
+                    {getDisplayedPages().map((pageNum) => (
                       <PaginationItem
-                        key={index}
+                        key={pageNum}
                         style={{ background: 'none', border: 'none' }}
                       >
                         <PaginationLink
                           href="#"
-                          onClick={() => setPage(index + 1)}
-                          isActive={index + 1 === page}
+                          onClick={() => setPage(pageNum)}
+                          isActive={pageNum === page}
                           style={{ background: 'none', border: 'none' }}
                         >
-                          {index + 1}
+                          {pageNum}
                         </PaginationLink>
                       </PaginationItem>
                     ))}
                     <PaginationItem>
-                      <PaginationNext onClick={() => setPage(prevPage => prevPage + 1)} />
+                    <PaginationNext onClick={() => setPage(prevPage => Math.min(prevPage + 1, totalPages))} />
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>
